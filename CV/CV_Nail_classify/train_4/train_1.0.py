@@ -88,32 +88,6 @@ def train_mapper(sample):
     img = img.flatten().astype("float32") / 255.0
     return img, lable
 
-def test_r(test_list, buffered_size=BUF_SIZE):
-    def reader():
-        with open(test_list, "r") as f:
-            # 将train.list里面的标签和图片放到一个list列表中，中间用\t隔开
-            lines = [line.strip() for line in f]
-            for line in lines:
-                img_path, lab = line.strip().split("\t")
-                if not os.path.exists(img_path):  # 图片可能空白太多被移走
-                    print("图片不存在:", img_path)
-                    continue
-                yield img_path, int(lab)
-
-    return paddle.reader.xmap_readers(test_mapper, reader, cpu_count(), buffered_size)
-
-def test_mapper(sample):
-    img, label = sample
-
-    img = paddle.dataset.image.load_image(img)
-    img = paddle.dataset.image.simple_transform(im=img,
-                                                resize_size=train_img_size,
-                                                crop_size=train_img_size,
-                                                is_color=True,
-                                                is_train=False)
-    img = img.flatten().astype("float32") / 255.0
-    return img, label
-
 def convolution_neural_network(image, type_size):
     '''
     搭建CNN网络
@@ -180,7 +154,6 @@ if __name__ == '__main__':
     print("开始执行:", time.strftime('%Y-%m-%d %H-%M-%S'))
     trainer_reader = train_r(train_list=train_file_path)
     train_batch_reader = paddle.batch(paddle.reader.shuffle(reader=trainer_reader, buf_size=BUF_SIZE), batch_size=BATCH_SIZE)
-    tester_reader = test_r(test_list=test_file_path)
     image = fluid.layers.data(name="image", shape=[3, train_img_size, train_img_size],
                               dtype="float32")  # [3, 400, 400]表示三通道RGB图像
     label = fluid.layers.data(name="label", shape=[1], dtype="int64")
