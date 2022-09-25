@@ -21,8 +21,8 @@ train_img_size = 400  # 训练图像大小
 label_dict = {} # 标签字典
 BUF_SIZE = 10000
 BATCH_SIZE = 32 # 批次大小
-EPOCH_NUM = 40 # 迭代次数
-learning_rate=0.000005 # 学习率
+EPOCH_NUM = 1 # 迭代次数
+learning_rate=0.000001 # 学习率
 
 def init_log_config():  # 初始化日志相关配置
     '''
@@ -167,8 +167,8 @@ if __name__ == '__main__':
     # 定义优化器Adam,一种万金油式的优化器,使用起来非常方便,梯度下降速度快,但是容易在最优值附近震荡,竞赛中性能会略逊于SGD
     optimizer = fluid.optimizer.Adam(learning_rate)
     opt = optimizer.minimize(avg_cost)
-    # place = fluid.CPUPlace() # CPU执行训练
-    place = fluid.CUDAPlace(0) # GPU执行训练
+    place = fluid.CPUPlace() # CPU执行训练
+    # place = fluid.CUDAPlace(0) # GPU执行训练
     exe = fluid.Executor(place)
     exe.run(fluid.default_startup_program())
     # 定义输入数据的维度, DataFeeder负责将reader返回的数据转成一种特殊结构，输入到Executor
