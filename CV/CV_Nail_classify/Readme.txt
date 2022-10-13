@@ -7,4 +7,3 @@
     6. 使用固化模型参数对指定图片进行预测，打印结果。
     7. 手动将多轮次训练cost/acc图片存放于cost&acc文件夹中，作为实验对比。
     8. 重新训练模型时，需手动删除model(增量模型)及model_freeze(固化模型)文件夹。
-    9. PaddlePaddle地址可Fork：https://aistudio.baidu.com/aistudio/projectdetail/4585156?contributionType=1
